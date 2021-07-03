@@ -17,6 +17,8 @@ import ConnectionPage from "./ConnectionPage";
 import AdminPage from "./AdminPage";
 import SettingsPage from "./SettingsPage";
 import LoadingPage from "components/LoadingPage";
+import LoginPage from "./LoginPage";
+
 import MainView from "components/MainView";
 import SupportChat from "components/SupportChat";
 
@@ -42,6 +44,7 @@ export enum Routes {
   Admin = "/admin",
   Settings = "/settings",
   Root = "/",
+  Login = "/login",
 }
 
 const getPageName = (pathname: string) => {
@@ -87,12 +90,17 @@ const getPageName = (pathname: string) => {
   if (pathname === Routes.Connections) {
     return "Connections Page";
   }
+  if (pathname === Routes.Login) {
+    return "Login Page";
+  }
 
   return "";
 };
 
 const MainViewRoutes = () => {
   const { pathname } = useRouter();
+  const isLoggedIn = localStorage.getItem("isLoggedIn") || false;
+
   useEffect(() => {
     const pageName = getPageName(pathname);
     if (pageName) {
@@ -100,7 +108,7 @@ const MainViewRoutes = () => {
     }
   }, [pathname]);
 
-  return (
+  return isLoggedIn ? (
     <MainView>
       <Suspense fallback={<LoadingPage />}>
         <Switch>
@@ -126,6 +134,10 @@ const MainViewRoutes = () => {
         </Switch>
       </Suspense>
     </MainView>
+  ) : (
+    <Suspense fallback={<LoadingPage />}>
+      <LoginPage />
+    </Suspense>
   );
 };
 
