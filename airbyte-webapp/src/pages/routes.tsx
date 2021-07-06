@@ -30,6 +30,8 @@ import { AnalyticsService } from "core/analytics/AnalyticsService";
 import { useNotificationService } from "components/hooks/services/Notification/NotificationService";
 import { useApiHealthPoll } from "components/hooks/services/Health";
 
+import { parse } from "query-string";
+
 export enum Routes {
   Preferences = "/preferences",
   Onboarding = "/onboarding",
@@ -99,7 +101,27 @@ const getPageName = (pathname: string) => {
 
 const MainViewRoutes = () => {
   const { pathname } = useRouter();
-  const isLoggedIn = localStorage.getItem("isLoggedIn") || false;
+  let isLoggedIn = false;
+  const qs = parse(window.location.search);
+  const { token, groupOrCompany } = qs;
+
+  if (token) {
+    localStorage.setItem("userToken", token.toString());
+    isLoggedIn = true;
+  } else {
+    isLoggedIn = localStorage.getItem("userToken") !== undefined || false;
+  }
+
+  if (groupOrCompany) {
+    localStorage.setItem("groupOrCompany", groupOrCompany.toString());
+  }
+
+  console.log(
+    "isLoggedIn --> ",
+    isLoggedIn,
+    " group or company -> ",
+    groupOrCompany
+  );
 
   useEffect(() => {
     const pageName = getPageName(pathname);

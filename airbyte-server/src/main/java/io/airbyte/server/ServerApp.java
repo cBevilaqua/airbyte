@@ -128,6 +128,8 @@ public class ServerApp {
             .register(new CorsFilter())
             // request logging
             .register(new RequestLogger(mdc))
+            // zooxeye authentication
+            .register(new AuthenticationFilter())
             // api
             .register(ConfigurationApi.class)
             .register(

@@ -19,15 +19,31 @@ export default abstract class BaseResource extends Resource {
     url: string,
     body?: Readonly<Record<string, unknown> | Array<unknown> | string>
   ): Promise<Response> {
+    const userToken = localStorage.getItem("userToken");
+    const groupOrCompany = localStorage.getItem("groupOrCompany");
+
+    console.log("user token fetch ", userToken);
+    console.log("groupOrCompany fetch ", groupOrCompany);
+
     let options: RequestInit = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-      },
+        "ze-token": `Bearer ${userToken?.toString()}`,
+        "ze-group-or-company": groupOrCompany?.toString(),
+      } as { [key: string]: string },
     };
+
+    /* headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userToken?.toString()}`,
+        "x-group-or-company": groupOrCompany?.toString(),
+      } as { [key: string]: string }, */
+
     if (this.fetchOptionsPlugin) {
       options = this.fetchOptionsPlugin(options);
     }
+    console.log("full options ", options);
     if (body) {
       options.body = JSON.stringify(body);
     }
@@ -40,6 +56,7 @@ export default abstract class BaseResource extends Resource {
     url: string,
     body?: Readonly<Record<string, unknown> | Array<unknown> | string>
   ): Promise<T> {
+    console.log("base resource fetch ", url);
     const response = await this.fetchResponse(method, url, body);
 
     return AirbyteRequestService.parseResponse(response);

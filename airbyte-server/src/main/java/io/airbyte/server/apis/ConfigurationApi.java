@@ -117,6 +117,7 @@ import io.airbyte.validation.json.JsonValidationException;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import java.io.File;
 import java.io.IOException;
+import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 
 @javax.ws.rs.Path("/v1")
@@ -499,6 +500,7 @@ public class ConfigurationApi implements io.airbyte.api.V1Api {
 
   // HEALTH
   @Override
+  @PermitAll
   public HealthCheckRead getHealthCheck() {
     return healthCheckHandler.health();
   }
