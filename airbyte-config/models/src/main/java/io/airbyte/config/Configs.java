@@ -47,6 +47,12 @@ public interface Configs {
 
   String getDatabaseUrl();
 
+  String getConfigDatabaseUser();
+
+  String getConfigDatabasePassword();
+
+  String getConfigDatabaseUrl();
+
   String getWebappUrl();
 
   String getWorkspaceDockerMount();
@@ -67,6 +73,9 @@ public interface Configs {
 
   String getKubeNamespace();
 
+  String getSubmitterNumThreads();
+
+  // Resources
   String getCpuRequest();
 
   String getCpuLimit();
@@ -75,7 +84,7 @@ public interface Configs {
 
   String getMemoryLimit();
 
-  // The following methods retrieve logging related information.
+  // Logging
   String getS3LogBucket();
 
   String getS3LogBucketRegion();
@@ -85,6 +94,10 @@ public interface Configs {
   String getAwsSecretAccessKey();
 
   String getS3MinioEndpoint();
+
+  String getGcpStorageBucket();
+
+  String getGoogleApplicationCredentials();
 
   enum TrackingStrategy {
     SEGMENT,

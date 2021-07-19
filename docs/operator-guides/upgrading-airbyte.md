@@ -30,6 +30,14 @@ If you are running [Airbyte on Kubernetes](../deploying-airbyte/on-kubernetes.md
    docker-compose up
    ```
 
+### Resetting your Configuration
+
+If you did not start Airbyte from the root of the Airbyte monorepo, you may run into issues where existing orphaned Airbyte configurations will prevent you from upgrading with the automatic process. To fix this, we will need to globally remove these lost Airbyte configurations. You can do this with `docker volume rm $(docker volume ls -q | grep airbyte)`.
+
+{% hint style="danger" %}
+This will completely reset your Airbyte instance back to scratch and you will lose all data.
+{% endhint %}
+
 ## Upgrading on K8s (0.27.0-alpha and above)
 
 If you are upgrading from (i.e. your current version of Airbyte is) Airbyte version **0.27.0-alpha or above** on Kubernetes :
@@ -73,7 +81,7 @@ If you are upgrading from  (i.e. your current version of Airbyte is) Airbyte ver
    Here's an example of what it might look like with the values filled in. It assumes that the downloaded `airbyte_archive.tar.gz` is in `/tmp`.
 
    ```bash
-   docker run --rm -v /tmp:/config airbyte/migration:0.27.0-alpha --\
+   docker run --rm -v /tmp:/config airbyte/migration:0.27.3-alpha --\
    --input /config/airbyte_archive.tar.gz\
    --output /config/airbyte_archive_migrated.tar.gz
    ```
@@ -88,14 +96,14 @@ If you are upgrading from  (i.e. your current version of Airbyte is) Airbyte ver
    # Careful, this is deleting data!
    kubectl delete -k kube/overlays/stable
    ```
-4. Follow **Step 2** in the [Docker upgrade process](#Upgrading-\(Docker\)) to check out the most recent version of Airbyte. Although it is possible to
+4. Follow **Step 2** in the `Upgrading on Docker` section to check out the most recent version of Airbyte. Although it is possible to
    migrate by changing the `.env` file in the kube overlay directory, this is not recommended as it does not capture any changes to the Kubernetes manifests.
 
 5. Bring Airbyte back up.
    ```bash
    kubectl apply -k kube/overlays/stable
    ```
-6. Follow **Step 8** in the [Docker upgrade process](#Upgrading-\(Docker\)) to upload your migrated Archive and restore your configuration and data.
+6. Switching over to your browser, navigate to the Admin page in the UI. Then go to the Configuration Tab and click on Import. Upload your migrated archive.
 
 If you prefer to import and export your data via API instead the UI, follow these instructions:
 
