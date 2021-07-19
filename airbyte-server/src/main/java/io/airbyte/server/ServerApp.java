@@ -129,7 +129,7 @@ public class ServerApp {
             // request logging
             .register(new RequestLogger(mdc))
             // zooxeye authentication
-            .register(new AuthenticationFilter())
+            //.register(new AuthenticationFilter())
             // api
             .register(ConfigurationApi.class)
             .register(

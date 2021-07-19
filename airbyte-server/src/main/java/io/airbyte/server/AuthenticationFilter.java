@@ -82,4 +82,5 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     Response resp = client.target(ZOOX_EYE_URL).path("/").request(MediaType.APPLICATION_JSON).header("Authorization", token).get();
     return resp.getStatus() == 200;
   }
+
 }
